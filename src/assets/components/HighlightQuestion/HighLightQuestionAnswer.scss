@@ -1,0 +1,40 @@
+.answer-option {
+  padding: 0 6px;
+  border: 1px solid var(--dark-gray-reduced); // maybe change to $light-gray???
+  cursor: pointer;
+  background-color: transparent;
+  height: 48px;
+  min-width: 24px; // need to set a min-width for single characters
+  border-radius: 6px;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #7890c41a; // 10% opacity of $blue-gray
+    border-color: var(--blue-gray);
+  }
+
+  &.selected {
+    background-color: #7890c466; // 40% opacity of $blue-gray
+    border-color: var(--blue-gray);
+  }
+
+  &.delete {
+    &:hover {
+      background-color: #f4344a;
+      border-color: #f4344a;
+      color: #fff;
+    }
+  }
+
+  &.space {
+    border-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+      cursor: default;
+    }
+  }
+
+  &.space-delete {
+  }
+}

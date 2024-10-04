@@ -1,0 +1,150 @@
+.assignment-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #edf0f3; // $light-gray
+  padding: 12px 34px; // 12px 16px in final version
+  border-radius: 10px; // not needed in final version
+  width: 980px; // may not be needed in final version
+
+  .assignment-type {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .assignment-title-input {
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    padding: 8px 16px;
+    width: 240px; // should grow with content
+    font-size: 16px;
+
+    &::placeholder {
+      color: var(--dark-gray-reduced);
+      font-weight: 700;
+    }
+  }
+
+  .assignment-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .assignment-text-input {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 16px;
+      width: 100%;
+
+      &::placeholder {
+        color: var(--dark-gray-reduced);
+      }
+    }
+
+    .assignment-btn-text-generate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 12px;
+      height: 100%;
+
+      &:hover {
+        background-color: var(--blue-gray);
+        color: #fff;
+
+        svg {
+          scale: 1.03;
+        }
+      }
+
+      &:disabled {
+        background-color: #fff;
+        color: #000;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .assignment-answer-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #fff;
+
+    .add-answer {
+      display: flex;
+      flex-direction: row-reverse; // hackish way to hide the border using the sibling operator
+      border-radius: 6px;
+      border: 1px solid var(--dark-gray-reduced);
+      background-color: white;
+      height: 48px;
+      overflow: hidden;
+
+      .external-url-input {
+        padding: 8px;
+        border: 0;
+        border-radius: 0;
+        background-color: transparent;
+        border-right: 1px solid #edf0f3;
+        width: 140px;
+      }
+      .external-link-upload-icon {
+        display: grid;
+        place-content: center;
+        background-color: transparent;
+        padding: 12px 16px;
+        cursor: pointer;
+        border: 0;
+
+        &:hover {
+          background-color: var(--blue-gray);
+          color: #fff;
+
+          ~ .external-url-input {
+            border-color: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  .assignment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      background-color: #fff;
+      border: 0;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333e48;
+      cursor: pointer;
+
+      &:hover,
+      &.delete {
+        background-color: #f4344a;
+        color: #fff;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+}
