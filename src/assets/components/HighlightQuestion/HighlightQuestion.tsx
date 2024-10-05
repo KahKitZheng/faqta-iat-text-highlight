@@ -91,6 +91,12 @@ export default function HighlightQuestion() {
     setAnswers(newAnswers);
   }
 
+  function updateAnswer(answerIndex: number, newAnswer: string) {
+    const newAnswers = [...answers];
+    newAnswers[answerIndex].text = newAnswer;
+    setAnswers(newAnswers);
+  }
+
   function deleteAnswer(answerIndex: number) {
     const newAnswers = [...answers];
     newAnswers.splice(answerIndex, 1);
@@ -190,6 +196,8 @@ export default function HighlightQuestion() {
                 answerIndex={index}
                 answerId={answerId}
                 handleOnClickAnswer={handleOnClickAnswer}
+                updateAnswer={updateAnswer}
+                deleteAnswer={deleteAnswer}
                 mode={mode}
               />
             ))}
@@ -204,6 +212,8 @@ export default function HighlightQuestion() {
                   answerIndex={itemIds.indexOf(activeDragId.toString())}
                   isDragged
                   handleOnClickAnswer={handleOnClickAnswer}
+                  updateAnswer={updateAnswer}
+                  deleteAnswer={deleteAnswer}
                   mode={mode}
                 />
               ) : null}

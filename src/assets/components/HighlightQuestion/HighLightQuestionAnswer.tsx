@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import "./HighLightQuestionAnswer.scss";
@@ -8,6 +9,8 @@ type HighLightQuestionAnswerProps = {
   answerId: string;
   answerIndex: number;
   handleOnClickAnswer: (answerIndex: number) => void;
+  updateAnswer: (answerIndex: number, newAnswer: string) => void;
+  deleteAnswer(answerIndex: number): void;
   isDragged?: boolean;
 };
 
@@ -19,6 +22,8 @@ export default function HighLightQuestionAnswer(
     answerId, // separate, because you need to pass id separately to DragOverlay
     answerIndex,
     handleOnClickAnswer,
+    updateAnswer,
+    deleteAnswer,
     isDragged,
     mode,
   } = props;
@@ -32,6 +37,8 @@ export default function HighLightQuestionAnswer(
     activeIndex,
     index,
   } = useSortable({ id: answerId });
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const isDeleteMode = mode === "delete";
   const isSortMode = mode === "sort";
@@ -56,7 +63,24 @@ export default function HighLightQuestionAnswer(
     return 1;
   }
 
-  return (
+  function handleFinishEditing(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      setIsEditing(false);
+    }
+    if (answer.text === "") {
+      deleteAnswer(answerIndex);
+    }
+  }
+
+  return isEditing ? (
+    <input
+      type="text"
+      className="answer-option-update"
+      value={answer.text}
+      onChange={(e) => updateAnswer(answerIndex, e.target.value)}
+      onKeyDown={handleFinishEditing}
+    />
+  ) : (
     <button
       ref={setNodeRef}
       className={`answer-option ${answer.isAnswer ? "selected" : ""} ${
@@ -68,6 +92,7 @@ export default function HighLightQuestionAnswer(
         transition: transition,
       }}
       onClick={() => handleOnClickAnswer(answerIndex)}
+      onDoubleClick={() => setIsEditing(true)}
       {...(isSortMode ? attributes : {})}
       {...(isDeleteMode ? {} : listeners)}
     >

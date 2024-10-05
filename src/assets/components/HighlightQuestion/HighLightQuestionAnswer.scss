@@ -1,3 +1,11 @@
+.answer-option-update {
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid var(--dark-gray-reduced); // maybe change to $light-gray???
+  padding: 0 6px;
+  width: fit-content;
+}
+
 .answer-option {
   padding: 0 6px;
   border: 1px solid var(--dark-gray-reduced); // maybe change to $light-gray???
