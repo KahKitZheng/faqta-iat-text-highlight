@@ -15,6 +15,7 @@
 .textarea-wrapper .textarea {
   resize: none;
   border: 0;
+  font-family: Arial;
   font-size: 14px;
   color: var(--dark-gray);
   border-radius: 6px;
@@ -27,7 +28,7 @@
   line-height: 1.5em;
 
   &::placeholder {
-    color: var(--blue-gray);
+    color: var(--dark-gray-reduced);
   }
   &.hint {
     &::placeholder {
