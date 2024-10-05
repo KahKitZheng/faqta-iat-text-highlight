@@ -30,7 +30,7 @@ const exampleText =
 export default function HighlightQuestion() {
   const [title, setTitle] = useState("");
   const [textToFormat, setTextToFormat] = useState(exampleText);
-  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [answers, setAnswers] = useState<HighlightAnswer[]>([]);
   const [newAnswer, setNewAnswer] = useState("");
 
   const [mode, setMode] = useState<"default" | "delete" | "sort">("default");

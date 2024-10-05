@@ -4,7 +4,7 @@ import "./HighLightQuestionAnswer.scss";
 
 type HighLightQuestionAnswerProps = {
   mode: "default" | "delete" | "sort";
-  answer: Answer;
+  answer: HighlightAnswer;
   answerId: string;
   answerIndex: number;
   handleOnClickAnswer: (answerIndex: number) => void;
