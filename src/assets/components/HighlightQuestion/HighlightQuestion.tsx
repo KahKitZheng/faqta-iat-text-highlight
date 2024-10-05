@@ -1,8 +1,27 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FaPlus, FaScissors, FaTrash } from "react-icons/fa6";
 import TextFormatPopup from "./TextFormatPopup";
-import "./HighlightQuestion.scss";
 import HighLightQuestionAnswer from "./HighLightQuestionAnswer";
+import { randomId } from "../../utils";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  pointerWithin,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
+import { createPortal } from "react-dom";
+import "./HighlightQuestion.scss";
 
 const exampleText =
   "De kat is gisteren naar huis gelopen. Dat vond Mimi persoonlijk niet zo leuk. Zij wilde liever nog even met de kat op het parkbankje zitten.";
@@ -13,14 +32,57 @@ export default function HighlightQuestion() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [newAnswer, setNewAnswer] = useState("");
 
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-
+  const [mode, setMode] = useState<"default" | "delete" | "sort">("default");
   const [isTextFormatPopupOpen, setIsTextFormatPopupOpen] = useState(false);
+  const [activeDragId, setActiveDragId] = useState<string | undefined>();
+
+  const isDeleteMode = mode === "delete";
+
+  const itemIds = answers.map((answer) => answer?.id ?? "");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 200, // need to differentiate between click and drag
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveDragId(event.active.id as string);
+    setMode("sort");
+  }, []);
+
+  const handleDragOver = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (over && active.id !== over.id) {
+        setAnswers((answers) => {
+          const oldIndex = itemIds.indexOf(active.id.toString());
+          const newIndex = itemIds.indexOf(over.id.toString());
+
+          return arrayMove(answers, oldIndex, newIndex);
+        });
+      }
+    },
+    [itemIds]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setActiveDragId(undefined);
+    setMode("default");
+  }, []);
 
   function addAnswer() {
     const newAnswers = [...answers];
 
     newAnswers.push({
+      id: randomId(),
       text: newAnswer === " " ? newAnswer : newAnswer.trim(),
       isAnswer: false,
     });
@@ -60,16 +122,16 @@ export default function HighlightQuestion() {
   function generateAnswers(format: string) {
     if (format === "letter") {
       const newAnswers = textToFormat.split("").map((letter) => ({
+        id: randomId(),
         text: letter,
         isAnswer: false,
       }));
       setAnswers(newAnswers);
     } else {
-      // insert space before punctuation
       const formattedText = textToFormat.replace(/([.,!?])/g, " $1");
 
-      // get all words
       const newAnswers = formattedText.split(" ").map((word) => ({
+        id: randomId(),
         text: word,
         isAnswer: false,
       }));
@@ -80,10 +142,6 @@ export default function HighlightQuestion() {
     setTextToFormat("");
     setIsTextFormatPopupOpen(false);
   }
-
-  useEffect(() => {
-    setIsDeleteMode(answers.length === 0 ? false : isDeleteMode);
-  }, [answers, isDeleteMode]);
 
   return (
     <div className="assignment-wrapper">
@@ -114,15 +172,47 @@ export default function HighlightQuestion() {
         </button>
       </div>
       <div className="assignment-answer-options">
-        {answers.map((answer, index) => (
-          <HighLightQuestionAnswer
-            key={index}
-            answerIndex={index}
-            answer={answer}
-            isDeleteMode={isDeleteMode}
-            handleOnClickAnswer={handleOnClickAnswer}
-          />
-        ))}
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragEnd}
+          collisionDetection={pointerWithin}
+          modifiers={[restrictToFirstScrollableAncestor]}
+        >
+          <SortableContext items={itemIds}>
+            {itemIds.map((answerId, index) => (
+              <HighLightQuestionAnswer
+                key={answerId}
+                answer={answers[index]}
+                answerIndex={index}
+                answerId={answerId}
+                isDeleteMode={isDeleteMode}
+                handleOnClickAnswer={handleOnClickAnswer}
+                mode={mode}
+              />
+            ))}
+          </SortableContext>
+
+          {createPortal(
+            <DragOverlay adjustScale={true} dropAnimation={null}>
+              {activeDragId ? (
+                <HighLightQuestionAnswer
+                  answer={answers[itemIds.indexOf(activeDragId.toString())]}
+                  answerId={activeDragId}
+                  answerIndex={itemIds.indexOf(activeDragId.toString())}
+                  isDragged
+                  isDeleteMode={isDeleteMode}
+                  handleOnClickAnswer={handleOnClickAnswer}
+                  mode={mode}
+                />
+              ) : null}
+            </DragOverlay>,
+            document.body
+          )}
+        </DndContext>
+
         <div className="add-answer">
           <button className="external-link-upload-icon" onClick={addAnswer}>
             <FaPlus />
@@ -144,7 +234,7 @@ export default function HighlightQuestion() {
       <div className="assignment-actions">
         <button
           className={`btn ${isDeleteMode ? "delete" : ""}`}
-          onClick={() => setIsDeleteMode(!isDeleteMode)}
+          onClick={() => setMode(isDeleteMode ? "default" : "delete")}
           disabled={answers.length === 0}
         >
           <FaTrash /> Selectie verwijderen
