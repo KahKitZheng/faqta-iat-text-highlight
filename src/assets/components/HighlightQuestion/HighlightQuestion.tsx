@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { FaPlus, FaScissors, FaTrash } from "react-icons/fa6";
 import TextFormatPopup from "./TextFormatPopup";
 import HighLightQuestionAnswer from "./HighLightQuestionAnswer";
+import TextArea from "../TextArea/TextaArea";
 import { randomId } from "../../utils";
 import {
   DndContext,
@@ -156,12 +157,12 @@ export default function HighlightQuestion() {
         onChange={(e) => setTitle(e.target.value)}
       />
       <div className="assignment-text">
-        <input
-          type="text"
-          className="assignment-text-input"
+        <TextArea
           placeholder="Type hier wat tekst of kopieer een alinea aan tekst, voor automatische transformatie..."
           value={textToFormat}
           onChange={(e) => setTextToFormat(e.target.value)}
+          grow
+          isWhite
         />
         <button
           className="assignment-btn-text-generate"
@@ -188,7 +189,6 @@ export default function HighlightQuestion() {
                 answer={answers[index]}
                 answerIndex={index}
                 answerId={answerId}
-                isDeleteMode={isDeleteMode}
                 handleOnClickAnswer={handleOnClickAnswer}
                 mode={mode}
               />
@@ -203,7 +203,6 @@ export default function HighlightQuestion() {
                   answerId={activeDragId}
                   answerIndex={itemIds.indexOf(activeDragId.toString())}
                   isDragged
-                  isDeleteMode={isDeleteMode}
                   handleOnClickAnswer={handleOnClickAnswer}
                   mode={mode}
                 />

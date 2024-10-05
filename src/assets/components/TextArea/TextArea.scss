@@ -1,0 +1,101 @@
+.textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+}
+
+.textarea-editor {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+// Default textarea
+.textarea-wrapper .textarea {
+  resize: none;
+  border: 0;
+  font-size: 14px;
+  color: var(--dark-gray);
+  border-radius: 6px;
+  padding: 9px 16px;
+  background-color: var(--light-gray);
+  outline: none;
+  flex: 0 1 auto;
+  height: 100%;
+  width: 100%;
+  line-height: 1.5em;
+
+  &::placeholder {
+    color: var(--blue-gray);
+  }
+  &.hint {
+    &::placeholder {
+      color: var(--dark-gray);
+      opacity: 0.5;
+    }
+  }
+
+  &.hide-scrollbar {
+    /* Works on Firefox */
+    @supports (-moz-appearance: none) {
+      & {
+        scrollbar-width: thin;
+        scrollbar-color: #fff;
+      }
+    }
+
+    /* Works on Chrome && Edge */
+    @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+        padding-right: 2px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.word-count {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: 0;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+// Textarea with character count
+.textarea-wrapper .display-counter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--dark-gray);
+  font-weight: 700;
+  font-size: 14px;
+  background-color: var(--light-gray);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 0 12px 12px;
+
+  &.bg-white,
+  &.hint {
+    background-color: #fff;
+  }
+}
+
+.textarea.bg-white,
+.textarea.hint {
+  background-color: #fff;
+}
