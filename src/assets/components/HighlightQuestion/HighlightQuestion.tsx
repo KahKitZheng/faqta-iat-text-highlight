@@ -29,7 +29,7 @@ const exampleText =
 
 export default function HighlightQuestion() {
   const [title, setTitle] = useState("");
-  const [textToFormat, setTextToFormat] = useState(exampleText);
+  const [textToFormat, setTextToFormat] = useState("");
   const [answers, setAnswers] = useState<HighlightAnswer[]>([]);
   const [newAnswer, setNewAnswer] = useState("");
 
@@ -133,7 +133,7 @@ export default function HighlightQuestion() {
         text: letter,
         isAnswer: false,
       }));
-      setAnswers(newAnswers);
+      setAnswers([...answers, ...newAnswers]);
     } else {
       const formattedText = textToFormat.replace(/([.,!?])/g, " $1");
 
@@ -143,7 +143,7 @@ export default function HighlightQuestion() {
         isAnswer: false,
       }));
 
-      setAnswers(newAnswers);
+      setAnswers([...answers, ...newAnswers]);
     }
 
     setTextToFormat("");

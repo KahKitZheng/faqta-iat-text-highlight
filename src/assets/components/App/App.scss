@@ -18,6 +18,11 @@
   box-sizing: border-box;
 }
 
+main {
+  display: grid;
+  gap: 1rem;
+}
+
 p {
   margin: 0;
 }

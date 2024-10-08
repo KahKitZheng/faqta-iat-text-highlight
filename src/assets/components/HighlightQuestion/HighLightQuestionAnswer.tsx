@@ -64,11 +64,14 @@ export default function HighLightQuestionAnswer(
   }
 
   function handleFinishEditing(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      setIsEditing(false);
+    if (e.key === "Backspace" && answer.text === "") {
+      return;
     }
-    if (answer.text === "") {
-      deleteAnswer(answerIndex);
+    if (e.key === "Enter" && answer.text === "") {
+      return deleteAnswer(answerIndex);
+    }
+    if (e.key === "Enter") {
+      return setIsEditing(false);
     }
   }
 
