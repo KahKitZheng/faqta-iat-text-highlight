@@ -24,9 +24,6 @@ import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
 import { createPortal } from "react-dom";
 import "./HighlightQuestion.scss";
 
-const exampleText =
-  "De kat is gisteren naar huis gelopen. Dat vond Mimi persoonlijk niet zo leuk. Zij wilde liever nog even met de kat op het parkbankje zitten.";
-
 export default function HighlightQuestion() {
   const [title, setTitle] = useState("");
   const [textToFormat, setTextToFormat] = useState("");
