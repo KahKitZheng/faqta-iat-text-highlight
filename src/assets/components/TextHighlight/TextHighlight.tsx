@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { FaPlus, FaScissors, FaTrash } from "react-icons/fa6";
-import TextFormatPopup from "./TextFormatPopup";
-import HighLightQuestionAnswer from "./HighLightQuestionAnswer";
+import TextHighlightFormatPopup from "./TextHighlightFormatPopup";
+import HighLightQuestionAnswer from "./TextHighlightAnswer";
 import TextArea from "../TextArea/TextaArea";
 import { randomId } from "../../utils";
 import {
@@ -22,9 +22,9 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
 import { createPortal } from "react-dom";
-import "./HighlightQuestion.scss";
+import "./TextHighlight.scss";
 
-export default function HighlightQuestion() {
+export default function TextHighlight() {
   const [title, setTitle] = useState("");
   const [textToFormat, setTextToFormat] = useState("");
   const [answers, setAnswers] = useState<HighlightAnswer[]>([]);
@@ -254,7 +254,7 @@ export default function HighlightQuestion() {
         </button>
       </div>
 
-      <TextFormatPopup
+      <TextHighlightFormatPopup
         isOpen={isTextFormatPopupOpen}
         onClose={() => setIsTextFormatPopupOpen(false)}
         handleOnClickOption={generateAnswers}

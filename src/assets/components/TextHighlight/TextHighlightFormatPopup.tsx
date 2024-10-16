@@ -1,12 +1,14 @@
-import "./TextFormatPopup.scss";
+import "./TextHighlightFormatPopup.scss";
 
-type TextFormatPopupProps = {
+type TextHighlightFormatPopupProps = {
   isOpen: boolean;
   onClose: () => void;
   handleOnClickOption: (option: string) => void;
 };
 
-export default function TextFormatPopup(props: Readonly<TextFormatPopupProps>) {
+export default function TextHighlightFormatPopup(
+  props: Readonly<TextHighlightFormatPopupProps>
+) {
   const { isOpen, onClose, handleOnClickOption } = props;
 
   return (

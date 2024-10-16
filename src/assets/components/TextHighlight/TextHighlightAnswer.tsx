@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import "./HighLightQuestionAnswer.scss";
+import "./TextHighlightAnswer.scss";
 
-type HighLightQuestionAnswerProps = {
+type TextHighlightAnswerProps = {
   mode: "default" | "delete" | "sort";
   answer: HighlightAnswer;
   answerId: string;
@@ -15,7 +15,7 @@ type HighLightQuestionAnswerProps = {
 };
 
 export default function HighLightQuestionAnswer(
-  props: Readonly<HighLightQuestionAnswerProps>
+  props: Readonly<TextHighlightAnswerProps>
 ) {
   const {
     answer,
