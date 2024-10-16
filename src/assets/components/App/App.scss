@@ -18,6 +18,12 @@
   box-sizing: border-box;
 }
 
+header {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
 main {
   display: grid;
   gap: 1rem;
