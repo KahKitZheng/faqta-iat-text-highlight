@@ -1,0 +1,116 @@
+.text-place-layout {
+  display: grid;
+  gap: 16px;
+  margin-top: 38px;
+  width: 1107px;
+  max-width: 80vw;
+
+  .question-area {
+    position: relative;
+    border: 3px solid var(--secondary-color);
+    border-radius: 16px;
+    top: 0;
+    left: 0;
+
+    .title {
+      position: absolute;
+      top: 0%;
+      left: 40px;
+      transform: translate(0%, -50%);
+      padding: 10px 16px;
+      border-radius: 16px;
+      background-color: var(--secondary-color);
+      color: var(--sec-ter-text);
+      font-weight: 700;
+    }
+
+    .text {
+      padding: 42px 32px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .answer {
+        border-radius: 6px;
+        border: 1px solid transparent;
+        background-color: transparent;
+        box-sizing: border-box;
+        height: 42px;
+        padding: 0 6px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+          border-color: var(--dark-gray-reduced);
+          background-color: #7890c466; // 40% opacity of $blue-gray
+        }
+
+        &:disabled {
+          pointer-events: none;
+          color: var(--dark-gray);
+        }
+
+        &.selected {
+          background-color: #7890c466; // 40% opacity of $blue-gray
+        }
+
+        &.correct {
+          background-color: var(--light-gray);
+        }
+
+        &.incorrect {
+          background-color: var(--dark-gray);
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 0 16px;
+
+    .button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &.reset {
+        background-color: transparent;
+        color: var(--dark-gray);
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: default;
+        }
+      }
+      &.submit {
+        background-color: var(--dark-gray);
+        color: var(--prim-text);
+        font-weight: 700;
+
+        &:disabled {
+          // opacity: 0.5;
+          cursor: default;
+        }
+
+        &.incorrect {
+          background-color: var(--dark-gray-reduced);
+          color: var(--prim-text);
+        }
+
+        &.correct {
+          background-color: var(--primary-color);
+          color: var(--prim-text);
+        }
+      }
+    }
+  }
+}

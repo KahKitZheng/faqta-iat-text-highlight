@@ -4,7 +4,12 @@ type HighlightAnswer = {
   isAnswer: boolean;
 };
 
-type HighlightQuestion = {
-  format: "letter" | "word";
-  textToFormat: string;
+type HighlightSubmitAnswer = HighlightAnswer & {
+  isSelected?: boolean;
+  isCorrect?: boolean;
+};
+
+type Data = {
+  title: string;
+  answers: HighlightAnswer[];
 };

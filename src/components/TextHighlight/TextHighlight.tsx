@@ -24,10 +24,15 @@ import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
 import { createPortal } from "react-dom";
 import "./TextHighlight.scss";
 
-export default function TextHighlight() {
-  const [title, setTitle] = useState("");
+type TextHighlightProps = {
+  data: Data;
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+};
+
+export default function TextHighlight(props: TextHighlightProps) {
+  const { data, setData } = props;
+
   const [textToFormat, setTextToFormat] = useState("");
-  const [answers, setAnswers] = useState<HighlightAnswer[]>([]);
   const [newAnswer, setNewAnswer] = useState("");
 
   const [mode, setMode] = useState<"default" | "delete" | "sort">("default");
@@ -36,7 +41,7 @@ export default function TextHighlight() {
 
   const isDeleteMode = mode === "delete";
 
-  const itemIds = answers.map((answer) => answer?.id ?? "");
+  const itemIds = data.answers.map((answer) => answer?.id ?? "");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -60,15 +65,16 @@ export default function TextHighlight() {
       const { active, over } = event;
 
       if (over && active.id !== over.id) {
-        setAnswers((answers) => {
+        setData((prev) => {
           const oldIndex = itemIds.indexOf(active.id.toString());
           const newIndex = itemIds.indexOf(over.id.toString());
 
-          return arrayMove(answers, oldIndex, newIndex);
+          const newAnswers = arrayMove(prev.answers, oldIndex, newIndex);
+          return { ...prev, answers: newAnswers };
         });
       }
     },
-    [itemIds]
+    [itemIds, setData]
   );
 
   const handleDragEnd = useCallback(() => {
@@ -77,7 +83,7 @@ export default function TextHighlight() {
   }, []);
 
   function addAnswer() {
-    const newAnswers = [...answers];
+    const newAnswers = [...data.answers];
 
     newAnswers.push({
       id: randomId(),
@@ -85,36 +91,36 @@ export default function TextHighlight() {
       isAnswer: false,
     });
 
-    setAnswers(newAnswers);
+    setData((prev) => ({ ...prev, answers: newAnswers }));
   }
 
   function updateAnswer(answerIndex: number, newAnswer: string) {
-    const newAnswers = [...answers];
+    const newAnswers = [...data.answers];
     newAnswers[answerIndex].text = newAnswer;
-    setAnswers(newAnswers);
+    setData((prev) => ({ ...prev, answers: newAnswers }));
   }
 
   function deleteAnswer(answerIndex: number) {
-    const newAnswers = [...answers];
+    const newAnswers = [...data.answers];
     newAnswers.splice(answerIndex, 1);
-    setAnswers(newAnswers);
+    setData((prev) => ({ ...prev, answers: newAnswers }));
   }
 
   function deleteAllAnswers() {
-    setAnswers([]);
+    setData((prev) => ({ ...prev, answers: [] }));
   }
 
   function markTextAsAnswer(answerIndex: number) {
-    const newAnswers = [...answers];
+    const newAnswers = [...data.answers];
     newAnswers[answerIndex].isAnswer = !newAnswers[answerIndex].isAnswer;
-    setAnswers(newAnswers);
+    setData((prev) => ({ ...prev, answers: newAnswers }));
   }
 
   function handleOnClickAnswer(answerIndex: number) {
-    if (answers[answerIndex].text === " " && isDeleteMode) {
+    if (data.answers[answerIndex].text === " " && isDeleteMode) {
       return deleteAnswer(answerIndex);
     }
-    if (answers[answerIndex].text === " ") {
+    if (data.answers[answerIndex].text === " ") {
       return;
     }
 
@@ -130,7 +136,10 @@ export default function TextHighlight() {
         text: letter,
         isAnswer: false,
       }));
-      setAnswers([...answers, ...newAnswers]);
+      setData((prev) => ({
+        ...prev,
+        answers: [...data.answers, ...newAnswers],
+      }));
     } else {
       const formattedText = textToFormat.replace(/([.,!?])/g, " $1");
 
@@ -140,12 +149,17 @@ export default function TextHighlight() {
         isAnswer: false,
       }));
 
-      setAnswers([...answers, ...newAnswers]);
+      setData((prev) => ({
+        ...prev,
+        answers: [...data.answers, ...newAnswers],
+      }));
     }
 
     setTextToFormat("");
     setIsTextFormatPopupOpen(false);
   }
+
+  console.log(data);
 
   return (
     <div className="assignment-wrapper">
@@ -156,8 +170,8 @@ export default function TextHighlight() {
         type="text"
         className="assignment-title-input"
         placeholder="Kies hier een leuke titel"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={data.title}
+        onChange={(e) => setData({ ...data, title: e.target.value })}
       />
       <div className="assignment-text">
         <TextArea
@@ -189,7 +203,7 @@ export default function TextHighlight() {
             {itemIds.map((answerId, index) => (
               <HighLightQuestionAnswer
                 key={answerId}
-                answer={answers[index]}
+                answer={data.answers[index]}
                 answerIndex={index}
                 answerId={answerId}
                 handleOnClickAnswer={handleOnClickAnswer}
@@ -204,7 +218,9 @@ export default function TextHighlight() {
             <DragOverlay adjustScale={true} dropAnimation={null}>
               {activeDragId ? (
                 <HighLightQuestionAnswer
-                  answer={answers[itemIds.indexOf(activeDragId.toString())]}
+                  answer={
+                    data.answers[itemIds.indexOf(activeDragId.toString())]
+                  }
                   answerId={activeDragId}
                   answerIndex={itemIds.indexOf(activeDragId.toString())}
                   isDragged
@@ -241,14 +257,14 @@ export default function TextHighlight() {
         <button
           className={`btn ${isDeleteMode ? "delete" : ""}`}
           onClick={() => setMode(isDeleteMode ? "default" : "delete")}
-          disabled={answers.length === 0}
+          disabled={data.answers.length === 0}
         >
           <FaTrash /> Selectie verwijderen
         </button>
         <button
           className="btn"
           onClick={deleteAllAnswers}
-          disabled={answers.length === 0}
+          disabled={data.answers.length === 0}
         >
           <FaTrash /> Alles verwijderen
         </button>
