@@ -159,8 +159,6 @@ export default function TextHighlight(props: TextHighlightProps) {
     setIsTextFormatPopupOpen(false);
   }
 
-  console.log(data);
-
   return (
     <div className="assignment-wrapper">
       <div>
