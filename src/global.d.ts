@@ -1,16 +1,16 @@
+type Data = {
+  title: string;
+  answers: HighlightAnswer[]; // probably rename it to items
+};
+
 type HighlightAnswer = {
   id?: string;
   text: string;
   isAnswer: boolean;
 };
 
-// Client only
+// This type is used only on client-side
 type HighlightSubmitAnswer = HighlightAnswer & {
   isSelected?: boolean;
   isCorrect?: boolean;
-};
-
-type Data = {
-  title: string;
-  answers: HighlightAnswer[]; // probably rename it to items
 };
