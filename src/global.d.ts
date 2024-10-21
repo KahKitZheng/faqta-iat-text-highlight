@@ -4,6 +4,7 @@ type HighlightAnswer = {
   isAnswer: boolean;
 };
 
+// Client only
 type HighlightSubmitAnswer = HighlightAnswer & {
   isSelected?: boolean;
   isCorrect?: boolean;
@@ -11,5 +12,5 @@ type HighlightSubmitAnswer = HighlightAnswer & {
 
 type Data = {
   title: string;
-  answers: HighlightAnswer[];
+  answers: HighlightAnswer[]; // probably rename it to items
 };
